@@ -1,0 +1,105 @@
+<body>
+	<form>
+  <input class="form" type="text" name="title" placeholder="Title"/>
+	<input class="form" type="text" name="author" placeholder="Author"/>
+	<input class="form" type="text" name="publisher" placeholder="Publisher"/>
+	<input class="form" type="text" name="id" placeholder="ID"/>
+	<input class="submit" type="submit" name="Submit"/>
+	</form>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.js"
+	integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+	crossorigin="anonymous"></script>
+<script>
+  $(".form").keydown(function(){
+		$(this).css('background-color' , "red");
+	});
+	$(".form").keyup(function() {
+    $(this).css("background-color", "");
+});
+
+	$(".submit").on("click", function(){
+		alert("Send!");
+	})
+
+    var body = $('body');
+    $('form').on('submit',function (event) {
+        event.preventDefault();
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            'type': "POST",
+            'url':'http://localhost:8282/books/add',
+            'data':JSON.stringify({
+                'author':event.target.author.value,
+                'publisher':event.target.publisher.value,
+                'title':event.target.title.value
+            })
+        }).done(function (data) {
+            console.log(data);
+            location.reload();
+        }).fail(function (xhr,status,error) {
+            console.log(xhr);
+            console.log(status);
+            console.log(error);
+            body.css('background-color','purple');
+            body.html("<h2>Tragic Catastrophe</h2>");
+        });
+    });
+    $.get('http://localhost:8282/books').done(function (data) {
+        console.log(data);
+        console.log(data.length);
+        for(var i=0; i<data.length; i++) {
+            body.append("<h1 data-id='"+
+                +data[i].id
+                +"'>"
+                +data[i].title
+                +"</h1><a data-id='"+
+                +data[i].id
+                +"' class='delete'>Delete</a><div></div>");
+            console.log(i);
+        }
+        $('div').hide();
+        $('h1').one('click',function (event) {
+            var h1 = $(event.target);
+            var id = h1.data('id');
+            $.get('http://localhost:8282/books/'+id).done(
+                function (data) {
+                    var div = h1.next();
+                    div.append("<p>"+"Autor: " + data.author+"</p>");
+                    div.append("<p>"+ "Publisher: " + data.publisher+"</p>");
+										div.append("<p>"+"Title: "  +data.title+"</p>");
+										div.append("<p>"+"Id: " + data.id+"</p>");
+                    div.fadeIn();
+                }
+            )
+        });
+        console.log($('a.delete'));
+        $('a.delete').on('click',function (event) {
+            var id = $(event.target).data('id');
+            console.log(id);
+            console.log(event.target);
+            $.ajax({
+                'url': 'http://localhost:8282/books/remove/'+id,
+                'type': "DELETE"
+            }).done(function () {
+                console.log("ok");
+                setTimeout(function () {
+                    location.reload();
+                },100)
+
+            }).fail(function (xhr,status,error) {
+                console.log(xhr);
+                console.log(status);
+                console.log(error);
+            });
+        })
+    }).fail(function () {
+        body.css('background-color','red');
+        body.append("<h1>Server is currently unavailable!!!</h1>")
+    });
+</script>
+</body>

@@ -1,0 +1,36 @@
+<p></p>
+<p></p>
+<h3></h3>
+
+<script src="https://code.jquery.com/jquery-3.2.1.js"
+	integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+	crossorigin="anonymous"></script>
+
+<script>
+  var i = 1 ;
+	setInterval(function() {
+		$.ajax({
+			"url" : 'http://date.jsontest.com'
+		}).done(function(data) {
+			console.log(data);
+			$('p').last().html(data.date + ' ' + data.time);
+});
+      $.get('http://swapi.co/api/people/'+(i++)+'/').done(function (data){
+    		  console.log(data.name);
+    		  $('p').first().html(data.name);
+    	});
+
+
+
+	}, 1000);
+
+	// $.get("http://swapi.co/api/people/4/").done(function (data){
+	// 	  console.log(data.name);
+	// 	  $('p').first().html(data.name);
+	// })
+	//
+	
+//	curl	-X	POST	-i	-H	"Content-Type:	application/json"	-d '{"isbn":"34321","title":"Thinking	in	Java","publisher":"Helion","type":"programming",author":"Bruce	Eckel"}'	http://localhost:8282/books/add
+
+
+</script>
