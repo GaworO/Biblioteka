@@ -1,0 +1,5 @@
+Celem projektu jest	funkcjonalna	aplikacji	frontendowej	do katalogowania	książek	metodą	REST.
+Po uruchomieniu aplikacji pojawia się formularz z możliwośćią wpisania : Tile , Author , Publisher oraz ID. 
+Aplikacja jest napisana przy użyciu technologii REST oras ajax.
+Została w formularzu urzyta również funkcjinalność JavaScript w postaci między innymi funckji mouseover , slideUp oraz alert.
+W przypadku nie uruchomienia się serwera ekran zrobi się czerowny i pojawi się informacja Server is currently unavailable. 
